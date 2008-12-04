@@ -1,14 +1,5 @@
-<%@ page session="true"%>
-<html>
+<%@ page session="false"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<head>
-<title>Index: Simple Web Application (with Spring Security)</title>
-</head>
-
-<body>
-
-Yes the simple web application is running correctly.
-
-</body>
-
-</html>
+<%-- Redirected because we can't set the welcome page to a virtual URL. --%>
+<c:redirect url="home.htm"/>
