@@ -2,5 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="lib" path="lib/test/junit/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="lib/test/webdriver/json-20080701.jar"/>
+	<classpathentry kind="lib" path="lib/test/webdriver/webdriver-common.jar"/>
+	<classpathentry kind="lib" path="lib/test/webdriver/webdriver-firefox.jar"/>
+	<classpathentry kind="output" path="target-eclipse"/>
 </classpath>
