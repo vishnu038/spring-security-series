@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="springsecurityseries">
+	<import file="tomcat-macros.xml" />
+
+	<!-- properties for building application -->
+	<property name="app.name" value="springsecuritywebapp" />
+	<property name="warfile.name" value="${app.name}.war" />
+
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="lib.test.dir" value="${lib.dir}/test" />
+	<property name="web.dir" value="${basedir}/web" />
+	<property name="source.dir" value="src/main/java" />
+	<property name="test.source.dir" value="src/test/java" />
+	<property name="webxml.file" value="${web.dir}/WEB-INF/web.xml" />
+	<property name="test.pattern" value="**/**Test.java" />
+
+	<!-- properties for generated artifacts -->
+	<property name="target.dir" value="target" />
+	<property name="classes.dir" value="${target.dir}/classes" />
+	<property name="classes.test.dir" value="${target.dir}/test-classes" />
+	<property name="report.dir" value="reports" />
+	<property name="test.report.dir" value="${report.dir}/tests" />
+
+	<!-- compilation settings -->
+	<property name="compile.debug" value="true" />
+	<property name="compile.deprecation" value="true" />
+	<property name="comiple.optimize" value="true" />
+
+	<!-- paths for dependencies used -->
+	<path id="build.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="junit.classpath">
+		<fileset dir="${lib.test.dir}">
+			<include name="junit/junit-4.5.jar" />
+		</fileset>
+	</path>
+
+	<path id="jmock.classpath">
+		<fileset dir="${lib.test.dir}">
+			<include name="jmock-2.5.1/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="devenv.test.classpath">
+		<path refid="junit.classpath" />
+		<path refid="jmock.classpath" />
+	</path>
+
+	<target name="clean" description="cleans up ant generated classes">
+		<echo message="${ant.project.name} - clean" />
+		<delete dir="${target.dir}" failonerror="true" />
+		<delete dir="${classes.dir}" failonerror="true" />
+		<delete dir="${classes.test.dir}" failonerror="true" />
+		<delete dir="${report.dir}" failonerror="true" />
+		<delete dir="${test.report.dir}" failonerror="true" />
+	</target>
+
+	<target name="compile">
+		<echo>compiling ${ant.project.name}</echo>
+		<javac debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${comiple.optimize}" srcdir="${source.dir}" destdir="${classes.dir}">
+			<classpath>
+				<path refid="build.classpath" />
+			</classpath>
+		</javac>
+		<javac debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${comiple.optimize}" srcdir="${test.source.dir}" destdir="${classes.test.dir}">
+			<classpath>
+				<path refid="devenv.test.classpath" />
+				<path refid="build.classpath" />
+				<pathelement path="${classes.dir}" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="test" depends="compile" description="run all the tests (unit)">
+		<junit dir="${basedir}" printsummary="false" fork="true" haltonfailure="false" errorProperty="test.failed" failureProperty="test.failed">
+			<sysproperty key="basedir" value="${basedir}" />
+			<formatter type="xml" />
+			<classpath>
+				<path refid="devenv.test.classpath" />
+				<path refid="build.classpath" />
+				<pathelement path="${classes.dir}" />
+				<pathelement path="${classes.test.dir}" />
+			</classpath>
+			<batchtest todir="${test.report.dir}">
+				<fileset dir="${test.source.dir}">
+					<include name="${test.pattern}" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="war" depends="-init, compile">
+		<delete file="${target.dir}/warfile.name" />
+		<war destfile="${target.dir}/${warfile.name}" webxml="${webxml.file}">
+			<fileset dir="${web.dir}">
+				<include name="**/*.xml" />
+				<include name="**/*.htm" />
+				<include name="**/*.html" />
+				<include name="**/*.jsp" />
+			</fileset>
+			<lib dir="lib">
+				<exclude name="compile/*.jar" />
+				<exclude name="source/*.jar" />
+				<exclude name="test/**/*.jar" />
+				<include name="**/*.jar" />
+			</lib>
+			<classes dir="${classes.dir}" />
+			<zipfileset dir="resources/images" prefix="images" />
+			<zipfileset dir="resources/css" prefix="css" />
+			<zipfileset dir="${web.dir}/WEB-INF" prefix="WEB-INF/classes">
+				<include name="*.properties" />
+			</zipfileset>
+		</war>
+	</target>
+
+	<target name="deploy" depends="war" description="deploy war to tomcat">
+		<!-- 
+		NOTE: some oddity when using ${tomcat.username} and ${tomcat.password}
+		Its like their values are not being picked up correctly and authentication fails and 
+		a 401 server error is returned for the deployment
+	    -->
+		<deploy-to-tomcat username="admin" password="admin" appname="${app.name}" warfile="target\${warfile.name}" />
+	</target>
+
+	<target name="undeploy" description="undeploy war from tomcat">
+		<undeploy-from-tomcat username="${tomcat.username}" password="${tomcat.username}" appname="${app.name}" />
+	</target>
+
+	<target name="stop" description="stop war application on tomcat">
+		<stop-on-tomcat username="${tomcat.username}" password="${tomcat.username}" appname="${app.name}" />
+	</target>
+
+	<target name="start" description="start war application on tomcat">
+		<start-on-tomcat username="${tomcat.username}" password="${tomcat.username}" appname="${app.name}" />
+	</target>
+
+	<target name="reload" description="reload app on tomcat">
+		<reload-context-on-tomcat username="${tomcat.username}" password="${tomcat.username}" appname="${app.name}" />
+	</target>
+
+	<target name="list" description="list all applications on tomcat">
+		<list-apps-on-tomcat username="${tomcat.username}" password="${tomcat.username}" />
+	</target>
+
+	<!-- private ant targets -->
+	<target name="-init">
+		<echo>creating project structure and classpaths for
+	            ${ant.project.name}</echo>
+		<mkdir dir="${target.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${classes.test.dir}" />
+		<mkdir dir="${report.dir}" />
+		<mkdir dir="${test.report.dir}" />
+	</target>
+</project>
