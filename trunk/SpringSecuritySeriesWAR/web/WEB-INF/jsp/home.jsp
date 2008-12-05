@@ -10,6 +10,9 @@
 
 <body>
 
+<%@ include file="/WEB-INF/jsp/navigation.jsp" %>
+
+
 home page: only logged in users should see this page.
 
 </body>

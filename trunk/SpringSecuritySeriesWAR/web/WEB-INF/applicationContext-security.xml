@@ -11,7 +11,12 @@
 		<intercept-url pattern="/login.jsp" filters="none" />
 		<intercept-url pattern="/**" access="ROLE_USER" />
 		<form-login login-page="/login.jsp" default-target-url="/home.htm"
-			always-use-default-target="false" authentication-failure-url="/login.jsp?authfailed=true"/>
+			always-use-default-target="false" authentication-failure-url="/login.jsp?authfailed=true" />
+		<logout invalidate-session="true" logout-url="/logout.htm"
+			logout-success-url="/login.jsp?loggedout=true" />
+
+		<concurrent-session-control max-sessions="1"
+			exception-if-maximum-exceeded="true" />
 	</http>
 
 	<authentication-provider>

@@ -16,7 +16,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
  * I contain end-to-end acceptance/functional tests for the simple web
  * application with spring security.
  * 
- * I specifically contain tests that verify the behaviour of UserStory 4.
+ * I specifically contain tests that verify the behaviour of UserStory 5.
  */
 public class UserStory5AcceptanceTest {
     
