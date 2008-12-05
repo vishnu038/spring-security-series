@@ -10,6 +10,9 @@
 
 <body>
 
+<%@ include file="/WEB-INF/jsp/navigation.jsp" %>
+
+
 Admin page: only administrative users should see this page.
 
 </body>
