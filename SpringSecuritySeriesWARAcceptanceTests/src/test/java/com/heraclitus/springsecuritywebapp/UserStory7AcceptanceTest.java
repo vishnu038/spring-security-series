@@ -1,6 +1,7 @@
 package com.heraclitus.springsecuritywebapp;
 
 import static com.heraclitus.springsecuritywebapp.dsl.NavigatingSpringSecurityWebApp.login;
+import static com.heraclitus.springsecuritywebapp.dsl.NavigatingSpringSecurityWebApp.logout;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -23,6 +24,9 @@ public class UserStory7AcceptanceTest {
     
     @After
     public void aTearDownMethodForEachTest() {
+        // teardown
+        logout(driver);
+        
         // close firefox browser that was launched after each test
         driver.close();
     }
@@ -41,7 +45,6 @@ public class UserStory7AcceptanceTest {
         assertNotNull(driver.findElement(By.linkText("Home")));
         assertNotNull(driver.findElement(By.linkText("Admin")));
         assertNotNull(driver.findElement(By.linkText("Logout")));
-        
     }
     
     @Test
