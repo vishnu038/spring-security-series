@@ -37,11 +37,11 @@ public class UserStory5AcceptanceTest {
         // login on login page
         final WebElement usernameField = driver.findElement(By
                 .name("j_username"));
-        usernameField.sendKeys("username");
+        usernameField.sendKeys("admin");
         
         final WebElement passwordField = driver.findElement(By
                 .name("j_password"));
-        passwordField.sendKeys("password");
+        passwordField.sendKeys("admin");
         
         passwordField.submit();
         
@@ -61,11 +61,11 @@ public class UserStory5AcceptanceTest {
         
         final WebElement usernameField = driver.findElement(By
                 .name("j_username"));
-        usernameField.sendKeys("username_does_not_exist");
+        usernameField.sendKeys("username");
         
         final WebElement passwordField = driver.findElement(By
                 .name("j_password"));
-        passwordField.sendKeys("password");
+        passwordField.sendKeys("incorrect_password");
         
         passwordField.submit();
         
@@ -101,8 +101,9 @@ public class UserStory5AcceptanceTest {
         
         final WebElement informationMessageSection = driver.findElement(By
                 .id("infomessage"));
-        assertThat(informationMessageSection.getText(),
-                containsString("Login failed due to: Bad credentials."));
+        assertThat(
+                informationMessageSection.getText(),
+                containsString("Login failed due to: Could not find user: username_does_not_exist."));
     }
     
     @Test
