@@ -35,6 +35,14 @@
 			ref="defaultConcurrentSessionController" />
 	</beans:bean>
 
+	<beans:bean id="defaultTargetUrlResolver"
+		class="org.springframework.security.ui.TargetUrlResolverImpl" />
+
+	<beans:bean id="roleBasedTargetUrlResolver"
+		class="com.heraclitus.web.RoleBasedTargetUrlResolverImpl">
+		<beans:constructor-arg ref="defaultTargetUrlResolver" />
+	</beans:bean>
+
 	<beans:bean id="customAuthenticationProcessingFilter"
 		class="org.springframework.security.ui.webapp.AuthenticationProcessingFilter">
 		<custom-filter position="AUTHENTICATION_PROCESSING_FILTER" />
@@ -42,6 +50,7 @@
 		<beans:property name="authenticationManager" ref="authenticationManager" />
 		<beans:property name="authenticationFailureUrl" value="/login.jsp?authfailed=true" />
 		<beans:property name="allowSessionCreation" value="true" />
+        <beans:property name="targetUrlResolver" ref="roleBasedTargetUrlResolver" />
 	</beans:bean>
 
 	<beans:bean id="myAuthenticationEntryPoint"

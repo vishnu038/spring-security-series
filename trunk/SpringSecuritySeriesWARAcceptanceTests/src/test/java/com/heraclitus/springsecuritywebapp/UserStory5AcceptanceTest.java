@@ -1,5 +1,6 @@
 package com.heraclitus.springsecuritywebapp;
 
+import static com.heraclitus.springsecuritywebapp.dsl.NavigatingSpringSecurityWebApp.logout;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
@@ -50,6 +51,9 @@ public class UserStory5AcceptanceTest {
                 is(not("Home: Spring Security Web Application")));
         assertThat(driver.getTitle(),
                 is("Admin: Spring Security Web Application"));
+        
+        // teardown
+        logout(driver);
         
     }
     

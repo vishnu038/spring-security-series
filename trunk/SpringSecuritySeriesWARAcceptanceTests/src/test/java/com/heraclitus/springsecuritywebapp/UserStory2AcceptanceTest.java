@@ -1,5 +1,8 @@
 package com.heraclitus.springsecuritywebapp;
 
+import static com.heraclitus.springsecuritywebapp.dsl.NavigatingSpringSecurityWebApp.loginAsUser;
+import static com.heraclitus.springsecuritywebapp.dsl.NavigatingSpringSecurityWebApp.logout;
+import static com.heraclitus.springsecuritywebapp.dsl.UsersOnSpringSecurityWebApp.withAdminRole;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -49,5 +52,20 @@ public class UserStory2AcceptanceTest {
         // state verification
         assertThat(driver.getTitle(),
                 is("Home: Spring Security Web Application"));
+        
+        // teardown
+        logout(driver);
+    }
+    
+    @Test
+    public void shouldForwardUsersWithAdminRoleToTheAdminPageAfterLogin() {
+        
+        loginAsUser(driver, withAdminRole());
+        
+        assertThat(driver.getTitle(),
+                is("Admin: Spring Security Web Application"));
+        
+        // teardown
+        logout(driver);
     }
 }
