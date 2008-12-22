@@ -75,6 +75,7 @@
 
 	<http entry-point-ref="myAuthenticationEntryPoint" auto-config="false">
 		<intercept-url pattern="/login.jsp" filters="none" />
+		<intercept-url pattern="/acldemo.htm" filters="none" />
 		<intercept-url pattern="/admin.htm" access="ROLE_ADMIN" />
 		<intercept-url pattern="/**" access="ROLE_USER" />
 
