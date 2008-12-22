@@ -18,5 +18,6 @@
 	<classpathentry kind="lib" path="lib/test/jmock-2.5.1/jmock-junit4-2.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/compile/servlet-api-2.5.jar"/>
 	<classpathentry kind="lib" path="lib/spring-security-taglibs-2.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/spring-security-acl-2.0.4.jar"/>
 	<classpathentry kind="output" path="target-eclipse"/>
 </classpath>
