@@ -1,0 +1,76 @@
+<project name="tomcat-macros">
+
+	<property file="tomcat.properties" />
+
+	<taskdef file="tomcatTasks.properties">
+		<classpath>
+			<pathelement
+				path="lib/compile/catalina-ant.jar" />
+		</classpath>
+	</taskdef>
+
+	<macrodef name="deploy-to-tomcat">
+		<attribute name="managerurl" default="${tomcat.manager.url}" />
+		<attribute name="username" default="${tomcat.username}" />
+		<attribute name="password" default="${tomcat.password}" />
+		<attribute name="appname" />
+		<attribute name="warfile" />
+		<sequential>
+			<deploy url="@{managerurl}" username="@{username}" password="@{password}"
+				path="/@{appname}" war="@{warfile}" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="undeploy-from-tomcat">
+		<attribute name="managerurl" default="${tomcat.manager.url}" />
+		<attribute name="username" default="${tomcat.username}" />
+		<attribute name="password" default="${tomcat.password}" />
+		<attribute name="appname" />
+		<sequential>
+			<undeploy url="@{managerurl}" username="@{username}"
+				password="@{password}" path="/@{appname}" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="reload-context-on-tomcat">
+		<attribute name="managerurl" default="${tomcat.manager.url}" />
+		<attribute name="username" default="${tomcat.username}" />
+		<attribute name="password" default="${tomcat.password}" />
+		<attribute name="appname" />
+		<sequential>
+			<reload url="@{managerurl}" username="@{username}" password="@{password}"
+				path="/@{appname}" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="start-on-tomcat">
+		<attribute name="managerurl" default="${tomcat.manager.url}" />
+		<attribute name="username" default="${tomcat.username}" />
+		<attribute name="password" default="${tomcat.password}" />
+		<attribute name="appname" />
+		<sequential>
+			<start url="@{managerurl}" username="@{username}" password="@{password}"
+				path="/@{appname}" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="stop-on-tomcat">
+		<attribute name="managerurl" default="${tomcat.manager.url}" />
+		<attribute name="username" default="${tomcat.username}" />
+		<attribute name="password" default="${tomcat.password}" />
+		<attribute name="appname" />
+		<sequential>
+			<stop url="@{managerurl}" username="@{username}" password="@{password}"
+				path="/@{appname}" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="list-apps-on-tomcat">
+		<attribute name="managerurl" default="${tomcat.manager.url}" />
+		<attribute name="username" default="${tomcat.username}" />
+		<attribute name="password" default="${tomcat.password}" />
+		<sequential>
+			<list url="@{managerurl}" username="@{username}" password="@{password}" />
+		</sequential>
+	</macrodef>
+</project>
