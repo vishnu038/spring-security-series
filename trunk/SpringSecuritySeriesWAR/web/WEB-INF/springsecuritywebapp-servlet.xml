@@ -4,6 +4,12 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
+    <!-- Web stuff below -->
+    <bean id="aclDemoController" name="/acldemo.htm" class="com.heraclitus.web.AclDemoController">
+        <property name="projectService" ref="projectService" />
+        <property name="aclQueryService" ref="aclQueryService" />
+    </bean>
+    
     <!--
         no 'id' required, HandlerMapping beans are automatically detected by
         the DispatcherServlet
@@ -11,6 +17,7 @@
     <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">
             <value>
+                /*acldemo.htm=aclDemoController
                 /*.htm=urlController
             </value>
         </property>

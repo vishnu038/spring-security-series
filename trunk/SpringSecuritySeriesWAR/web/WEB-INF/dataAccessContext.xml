@@ -33,32 +33,32 @@
             </bean>
         </constructor-arg>
     </bean>
+    
+    <bean id="aclAuthorizationStrategy" class="org.springframework.security.acls.domain.AclAuthorizationStrategyImpl">
+        <constructor-arg>
+            <list>
+                <!-- authority for taking ownership -->
+                <bean class="org.springframework.security.GrantedAuthorityImpl">
+                    <constructor-arg value="ROLE_ADMIN"/>
+                </bean>
+                <!-- authority to modify auditing -->
+                <bean class="org.springframework.security.GrantedAuthorityImpl">
+                    <constructor-arg value="ROLE_ADMIN"/>
+                </bean>
+                <!-- authority to make general changes -->
+                <bean class="org.springframework.security.GrantedAuthorityImpl">
+                    <constructor-arg value="ROLE_ADMIN"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+    
 
     <bean id="lookupStrategy"
         class="org.springframework.security.acls.jdbc.BasicLookupStrategy">
         <constructor-arg ref="dataSource" />
         <constructor-arg ref="aclCache" />
-        <constructor-arg>
-            <bean
-                class="org.springframework.security.acls.domain.AclAuthorizationStrategyImpl">
-                <constructor-arg>
-                    <list>
-                        <!-- authority for taking ownership -->
-                        <bean class="org.springframework.security.GrantedAuthorityImpl">
-                            <constructor-arg value="ROLE_ADMIN" />
-                        </bean>
-                        <!-- authority to modify auditing -->
-                        <bean class="org.springframework.security.GrantedAuthorityImpl">
-                            <constructor-arg value="ROLE_ADMIN" />
-                        </bean>
-                        <!-- authority to make general changes -->
-                        <bean class="org.springframework.security.GrantedAuthorityImpl">
-                            <constructor-arg value="ROLE_ADMIN" />
-                        </bean>
-                    </list>
-                </constructor-arg>
-            </bean>
-        </constructor-arg>
+        <constructor-arg ref="aclAuthorizationStrategy" />
         <constructor-arg>
             <bean class="org.springframework.security.acls.domain.ConsoleAuditLogger" />
         </constructor-arg>
@@ -75,5 +75,37 @@
         <property name="dataSource" ref="dataSource" />
         <property name="mutableAclService" ref="aclService" />
         <property name="platformTransactionManager" ref="transactionManager" />
+    </bean>
+    
+    <bean id="projectDao" class="com.heraclitus.dao.springjdbc.ProjectDaoSpringJDBC">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="projectService" class="com.heraclitus.service.impl.ProjectServiceImpl">
+        <property name="projectDao" ref="projectDao" />
+    </bean>
+
+     <!-- ACL Specific dao's and services -->
+    <bean id="aclSidDao" class="com.heraclitus.dao.acl.springjdbc.AclSidDaoSpringJDBC">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="aclClassDao" class="com.heraclitus.dao.acl.springjdbc.AclClassDaoSpringJDBC">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="aclObjectIdentityDao" class="com.heraclitus.dao.acl.springjdbc.AclObjectIdentityDaoSpringJDBC">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="aclEntryDao" class="com.heraclitus.dao.acl.springjdbc.AclEntryDaoSpringJDBC">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="aclQueryService" class="com.heraclitus.service.impl.AclQueryServiceImpl">
+        <property name="aclSidDao" ref="aclSidDao" />
+        <property name="aclClassDao" ref="aclClassDao" />
+        <property name="aclObjectIdentityDao" ref="aclObjectIdentityDao" />
+        <property name="aclEntryDao" ref="aclEntryDao" />
     </bean>
 </beans>
