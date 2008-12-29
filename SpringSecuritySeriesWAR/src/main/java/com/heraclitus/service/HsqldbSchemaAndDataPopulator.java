@@ -4,26 +4,18 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
 import org.springframework.security.acls.MutableAcl;
 import org.springframework.security.acls.MutableAclService;
 import org.springframework.security.acls.Permission;
 import org.springframework.security.acls.domain.AclImpl;
-import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.objectidentity.ObjectIdentity;
 import org.springframework.security.acls.objectidentity.ObjectIdentityImpl;
 import org.springframework.security.acls.sid.PrincipalSid;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
-
-import com.heraclitus.domain.ProjectImpl;
 
 /**
  * I am responsible for populating the configured datasource
@@ -38,9 +30,9 @@ public class HsqldbSchemaAndDataPopulator implements InitializingBean {
      *
      */
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(mutableAclService, "mutableAclService required");
+        // Assert.notNull(mutableAclService, "mutableAclService required");
+        // Assert.notNull(tt, "platformTransactionManager required");
         Assert.notNull(template, "dataSource required");
-        Assert.notNull(tt, "platformTransactionManager required");
         
         // create schema to allow Spring Security ACL approach.
         template
@@ -121,28 +113,29 @@ public class HsqldbSchemaAndDataPopulator implements InitializingBean {
         template
                 .execute("INSERT INTO projects VALUES (2, 'Test Project 2', 'Smaller description of project here.');");
         
-        // Set a user account that will initially own all the created data
-        final Authentication authRequest = new UsernamePasswordAuthenticationToken(
-                "admin", "admin",
-                new GrantedAuthority[] { new GrantedAuthorityImpl(
-                        "ROLE_IGNORED") });
-        SecurityContextHolder.getContext().setAuthentication(authRequest);
-        
-        // Now for the ACL stuff
-        createObjectIdentityEntryFor(ProjectImpl.class, Long.valueOf(1));
-        createObjectIdentityEntryFor(ProjectImpl.class, Long.valueOf(2));
-        
-        grantPermissions(ProjectImpl.class, Long.valueOf(1), "admin",
-                BasePermission.ADMINISTRATION);
-        grantPermissions(ProjectImpl.class, Long.valueOf(1), "username",
-                BasePermission.READ);
-        
-        grantPermissions(ProjectImpl.class, Long.valueOf(2), "admin",
-                BasePermission.ADMINISTRATION);
-        grantPermissions(ProjectImpl.class, Long.valueOf(2), "username",
-                BasePermission.READ);
-        
-        SecurityContextHolder.clearContext();
+        // // Set a user account that will initially own all the created data
+        // final Authentication authRequest = new
+        // UsernamePasswordAuthenticationToken(
+        // "admin", "admin",
+        // new GrantedAuthority[] { new GrantedAuthorityImpl(
+        // "ROLE_IGNORED") });
+        // SecurityContextHolder.getContext().setAuthentication(authRequest);
+        //        
+        // // Now for the ACL stuff
+        // createObjectIdentityEntryFor(ProjectImpl.class, Long.valueOf(1));
+        // createObjectIdentityEntryFor(ProjectImpl.class, Long.valueOf(2));
+        //        
+        // grantPermissions(ProjectImpl.class, Long.valueOf(1), "admin",
+        // BasePermission.ADMINISTRATION);
+        // grantPermissions(ProjectImpl.class, Long.valueOf(1), "username",
+        // BasePermission.READ);
+        //        
+        // grantPermissions(ProjectImpl.class, Long.valueOf(2), "admin",
+        // BasePermission.ADMINISTRATION);
+        // grantPermissions(ProjectImpl.class, Long.valueOf(2), "username",
+        // BasePermission.READ);
+        //        
+        // SecurityContextHolder.clearContext();
     }
     
     public void setDataSource(final DataSource dataSource) {

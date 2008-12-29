@@ -6,9 +6,9 @@
 	<classpathentry kind="lib" path="lib/jstl.jar"/>
 	<classpathentry kind="lib" path="lib/standard.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
-	<classpathentry kind="lib" path="lib/spring-security-core-2.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/spring-security-core-2.0.4.jar" sourcepath="/WebApplicationWAR/lib/spring-security-core-2.0.4-sources.jar"/>
 	<classpathentry kind="lib" path="lib/spring-webmvc.jar"/>
-	<classpathentry kind="lib" path="lib/spring.jar"/>
+	<classpathentry kind="lib" path="lib/spring.jar" sourcepath="/WebApplicationWAR/lib/spring-sources.jar"/>
 	<classpathentry kind="lib" path="lib/test/junit/junit-4.5.jar"/>
 	<classpathentry kind="lib" path="lib/test/jmock-2.5.1/bsh-core-2.0b4.jar"/>
 	<classpathentry kind="lib" path="lib/test/jmock-2.5.1/cglib-nodep-2.1_3.jar"/>
@@ -19,5 +19,6 @@
 	<classpathentry kind="lib" path="lib/compile/servlet-api-2.5.jar"/>
 	<classpathentry kind="lib" path="lib/spring-security-taglibs-2.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/spring-security-acl-2.0.4.jar" sourcepath="/WebApplicationWAR/lib/spring-security-acl-2.0.4-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-security-core-tiger-2.0.4.jar" sourcepath="/WebApplicationWAR/lib/spring-security-core-tiger-2.0.4-sources.jar"/>
 	<classpathentry kind="output" path="target-eclipse"/>
 </classpath>
