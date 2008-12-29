@@ -4,36 +4,26 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
                         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd">
 
-	<global-method-security secured-annotations="disabled">
-	</global-method-security>
+	<global-method-security secured-annotations="enabled" />
 
-	<beans:bean id="sessionRegistry"
-		class="org.springframework.security.concurrent.SessionRegistryImpl" />
+	<authentication-manager alias="authenticationManager" />
 
-	<beans:bean id="defaultConcurrentSessionController"
-		class="org.springframework.security.concurrent.ConcurrentSessionControllerImpl">
-		<beans:property name="sessionRegistry" ref="sessionRegistry" />
-		<beans:property name="exceptionIfMaximumExceeded"
-			value="true" />
-	</beans:bean>
+	<http auto-config="false" session-fixation-protection="none"
+		entry-point-ref="formLoginAuthenticationEntryPoint">
+		<intercept-url pattern="/home.htm" access="ROLE_USER, ROLE_ADMIN" />
+		<intercept-url pattern="/admin.htm" access="ROLE_ADMIN" />
+		<intercept-url pattern="/acldemo.htm" access="ROLE_USER, ROLE_ADMIN" />
+		<intercept-url pattern="/methoddemo.htm"
+			access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN" />
+		<intercept-url pattern="/**"
+			access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN" />
 
-	<beans:bean id="daoAuthenticationProvider"
-		class="org.springframework.security.providers.dao.DaoAuthenticationProvider">
-		<beans:property name="userDetailsService" ref="userDetailsService" />
-		<beans:property name="hideUserNotFoundExceptions"
-			value="false" />
-	</beans:bean>
+		<anonymous />
+		<logout logout-success-url="/login.jsp?loggedout=true" />
 
-	<beans:bean id="authenticationManager"
-		class="org.springframework.security.providers.ProviderManager">
-		<beans:property name="providers">
-			<beans:list>
-				<beans:ref local="daoAuthenticationProvider" />
-			</beans:list>
-		</beans:property>
-		<beans:property name="sessionController"
-			ref="defaultConcurrentSessionController" />
-	</beans:bean>
+		<concurrent-session-control
+			exception-if-maximum-exceeded="true" />
+	</http>
 
 	<beans:bean id="defaultTargetUrlResolver"
 		class="org.springframework.security.ui.TargetUrlResolverImpl" />
@@ -41,6 +31,11 @@
 	<beans:bean id="roleBasedTargetUrlResolver"
 		class="com.heraclitus.web.RoleBasedTargetUrlResolverImpl">
 		<beans:constructor-arg ref="defaultTargetUrlResolver" />
+	</beans:bean>
+
+	<beans:bean id="formLoginAuthenticationEntryPoint"
+		class="org.springframework.security.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+		<beans:property name="loginFormUrl" value="/login.jsp" />
 	</beans:bean>
 
 	<beans:bean id="customAuthenticationProcessingFilter"
@@ -68,23 +63,12 @@
 
 	</beans:bean>
 
-	<beans:bean id="myAuthenticationEntryPoint"
-		class="org.springframework.security.ui.webapp.AuthenticationProcessingFilterEntryPoint">
-		<beans:property name="loginFormUrl" value="/login.jsp" />
+	<beans:bean id="daoAuthenticationProvider"
+		class="org.springframework.security.providers.dao.DaoAuthenticationProvider">
+		<custom-authentication-provider />
+		<beans:property name="userDetailsService" ref="userDetailsService" />
+		<beans:property name="hideUserNotFoundExceptions"
+			value="false" />
 	</beans:bean>
 
-	<http entry-point-ref="myAuthenticationEntryPoint" auto-config="false">
-		<intercept-url pattern="/login.jsp" filters="none" />
-		<intercept-url pattern="/acldemo.htm" filters="none" />
-		<intercept-url pattern="/admin.htm" access="ROLE_ADMIN" />
-		<intercept-url pattern="/**" access="ROLE_USER" />
-
-		<logout invalidate-session="true" logout-url="/logout.htm"
-			logout-success-url="/login.jsp?loggedout=true" />
-	</http>
-
-	<authentication-provider>
-		<jdbc-user-service id="userDetailsService"
-			data-source-ref="dataSource" />
-	</authentication-provider>
 </beans:beans>

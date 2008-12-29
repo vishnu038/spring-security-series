@@ -1,5 +1,6 @@
 package com.heraclitus.springsecuritywebapp;
 
+import static com.heraclitus.springsecuritywebapp.dsl.NavigatingSpringSecurityWebApp.logout;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -48,6 +49,8 @@ public class UserStory4AcceptanceTest {
         // state verification
         assertThat(driver.getTitle(),
                 is("Home: Spring Security Web Application"));
+        
+        logout(driver);
     }
     
     @Test

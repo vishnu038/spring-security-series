@@ -1,5 +1,6 @@
 package com.heraclitus.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.AccessDeniedException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
@@ -29,7 +31,13 @@ public class AclDemoController implements Controller {
     public ModelAndView handleRequest(final HttpServletRequest request,
             final HttpServletResponse response) throws Exception {
         
-        final List<Project> projects = projectService.findAllProjects();
+        List<Project> projects;
+        try {
+            projects = projectService.findAllProjects();
+        } catch (final AccessDeniedException e) {
+            projects = new ArrayList<Project>();
+        }
+        
         final List<AclSid> aclSids = aclQueryService.findAllAclSidEntries();
         final List<AclClass> aclClasses = aclQueryService.findAllAclClasses();
         final List<AclObjectIdentity> aclObjectIdentities = aclQueryService

@@ -107,7 +107,7 @@ public class UserStory5AcceptanceTest {
                 .id("infomessage"));
         assertThat(
                 informationMessageSection.getText(),
-                containsString("Login failed due to: Could not find user: username_does_not_exist."));
+                containsString("Login failed due to: User username_does_not_exist not found."));
     }
     
     @Test

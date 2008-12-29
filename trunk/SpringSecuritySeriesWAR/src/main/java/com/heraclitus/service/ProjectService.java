@@ -2,6 +2,8 @@ package com.heraclitus.service;
 
 import java.util.List;
 
+import org.springframework.security.annotation.Secured;
+
 import com.heraclitus.domain.Project;
 
 /**
@@ -9,6 +11,7 @@ import com.heraclitus.domain.Project;
  */
 public interface ProjectService {
     
+    @Secured( { "ROLE_USER" })
     List<Project> findAllProjects();
     
 }

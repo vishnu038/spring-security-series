@@ -14,6 +14,7 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectDao projectDao;
     
     public List<Project> findAllProjects() {
+        
         return projectDao.findAllProjects();
     }
     
